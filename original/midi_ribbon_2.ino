@@ -5,6 +5,7 @@
 * Modified by hyz
 */
 
+#include <EEPROM.h>
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
 #include <QuickStats.h>
@@ -24,7 +25,7 @@
 #define S1        A4      //String 1
 #define M1        A5      //Modulation 1
 
-/* Here for legacy */
+/*Here for legacy*/
 #define T0        A0
 #define T1        A0
 #define T2        A0
@@ -33,13 +34,16 @@
 #define JSX       A7
 #define JSY       A6
 
+//#define JSSEL     7
+
+
 #define THRESH    600
 #define N_STR     2
 #define N_FRET    25
 #define S_PAD     3
 #define T_PAD     300
 
-#define MOD_THRESHOLD 30  // Modulation is not sent under this value
+#define MOD_THRESHOLD 30  //Modulation is not send under this value
 
 //---Midi CC----
 #define VOLUME_CC 7
@@ -48,7 +52,7 @@
 #define VOLCA_VOLUME_CC 11
 #define VOLCA_MOD_CC 46
 #define VOLCA_MIDI_CHANNEL 10
-#define MUTE_CC 123
+#define MUTE_CC 123 
 
 long noteDebounceTime = 0;
 int noteDebounceDelay = 25;
@@ -59,12 +63,7 @@ int debounceDelay = 200;
 long ledDebounceTime = 0;
 int ledDebounceDelay = 20;
 
-//short fretDefs[N_STR][N_FRET];
-
-short fretDefs[N_STR][N_FRET] = { {10,50,90,130,170,210,250,290,330,370,410,450,490,530,570,610,650,690,730,770,810,850,890,930,970},
-                                  {10,50,90,130,170,210,250,290,330,370,410,450,490,530,570,610,650,690,730,770,810,850,890,930,970}
-};
-
+short fretDefs[N_STR][N_FRET];
 
 int mod_final;
 int vol;
@@ -73,10 +72,10 @@ int modal;
 int modal_buffer;
 int buffer_mod[2];
 int mod[2];
-int mod_init[2]; // initial values for modulation
-int s_init[2];   // initial values for string position
-int pre_vol;     // previous volume
-int pre_mod;     // previous modulation
+int mod_init[2]; //initial values for modulation
+int s_init[2];   //intial values for string position
+int pre_vol;     //previous volume
+int pre_mod;     //previous modulation
 bool volca = false;
 int volume_cc = VOLUME_CC;
 int mod_cc = MOD_CC;
@@ -85,34 +84,37 @@ bool isPitchBend = false;
 unsigned int pitchBendLight = 0;
 bool dim = false;
 
-int modal_array [6][7] =  {{0,2,4,5,7,9,11},   // ionian
-                           {0,2,3,5,7,9,10},   // dorian
-                           {0,1,3,5,7,8,10},   // phyrgian
-                           {0,2,4,6,7,9,11},   // lydian
-                           {0,2,4,5,7,9,10},   // mxyolydian
-                           {0,2,3,5,7,8,10}};  // aeolian
+
+int modal_array [6][7] =  {{0,2,4,5,7,9,11},   //ionian
+                           {0,2,3,5,7,9,10},   //dorian
+                           {0,1,3,5,7,8,10},   //phyrgian
+                           {0,2,4,6,7,9,11},   //lydian
+                           {0,2,4,5,7,9,10},   //mxyolydian
+                           {0,2,3,5,7,8,10}};    //aeolian
+                           //{0,1,3,5,6,8,10}};
 
 short T_vals[N_STR];
-bool T_active[] = {false, false, false, false}; // is it currently active
-short T_hit[N_STR];                             // has it been hit on this loop
+bool T_active[] = {false, false, false, false}; //is it currently active
+short T_hit[N_STR];                             //has it been hit on this loop
 int T_pins[] = {T0, T1, T2, T3};
 
-short S_vals[N_STR];                            // current sensor values
-short S_old[N_STR];                             // old sensor values for comparison
-int S_active[N_STR];                            // currently active notes
-int S_pins[] = {S0, S1};
+short S_vals[N_STR];                            //current sensor values
+short S_old[N_STR];                             //old sensor values for comparison
+int S_active[N_STR];                            //currently active notes
+int S_pins[] = {S0,S1};
 int fretTouched[N_STR];
 
 bool modreset = true;
 
-// E A D G
+//E A D G
 int offsets_default[] = {40, 45, 50, 55};
 
-// B E A D
+//B E A D
 int offsets_transposed[] = {35, 40, 45, 50};
 
-// default offsets
+//default offsets
 int offsets[] = {40, 45, 50, 55};
+
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(N_PIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 int led_number[2] = {0,0};
@@ -131,8 +133,14 @@ unsigned long last_read;
 QuickStats stats;
 
 void setup() {
-  //Serial.begin(115200);
+  //read fret definitions from EEPROM
+  for (int i=0; i<N_STR; i++){
+    for (int j=0; j<N_FRET; j++){
+      fretDefs[i][j] = EEPROMReadShort(j * sizeof(short) + (N_FRET*i*sizeof(short)));
+    }
+  }
   Serial.begin(31250);
+  //Serial.begin(115200);
   
   for(int i=0; i<N_STR; i++){
     pinMode(T_pins[i], INPUT);
@@ -143,14 +151,13 @@ void setup() {
   pinMode(JSY, INPUT);
   //pinMode(JSSEL, INPUT);
   //digitalWrite(JSSEL, HIGH);
-  
+
   pinMode(PIN_LED, OUTPUT);
 
   pixels.begin();
   pixels.setBrightness(50);
   pixels.show();
-  
-  // calibrate joystick
+  //calibrate joystick
   stickZeroX = analogRead(JSX);
   stickZeroY = analogRead(JSY);
 
@@ -159,12 +166,11 @@ void setup() {
 
   pinMode(TRANSPOSE_UP, INPUT_PULLUP);
   pinMode(TRANSPOSE_DOWN, INPUT_PULLUP);
-  pinMode(A0, INPUT);
-  pinMode(3, INPUT_PULLUP);
-  pinMode(VOLUME, INPUT);
-  pinMode(M0, INPUT);
-  pinMode(M1, INPUT);
-  
+  pinMode(A0,INPUT);
+  pinMode(3,INPUT_PULLUP);
+  pinMode(VOLUME,INPUT);
+  pinMode(M0,INPUT);
+  pinMode(M1,INPUT);
   mod_init[0] = analogRead(M0);
   mod_init[1] = analogRead(M1);
   s_init[1] = analogRead(S1);
@@ -183,51 +189,49 @@ void loop() {
   delay(1);
 }
 
-// Other functions remain the same except removing EEPROM related functions
-
 void readModulationAndVol(){
   buffer_mod[0] = analogRead(M0);
   buffer_mod[1] = analogRead(M1);
   vol_buffer = analogRead(VOLUME);
   modal_buffer = analogRead(MODAL);
   modal_buffer = map(modal_buffer, 0, 700, 0, 7);
-  mod[1] = map(buffer_mod[1], mod_init[1], mod_init[1]+400, 0, 127);
+  mod[1] = map(buffer_mod[1],mod_init[1],mod_init[1]+400,0,127);
   mod[0] = map(buffer_mod[0], 500,500+300, 0, 127);
   mod_final = max(mod[0],mod[1]);
   vol = map(vol_buffer, 0, 300, 0, 127);
-  
   if(abs(modal_buffer != modal)){
     if(modal_buffer > 7){
       modal = 7;
       modal_buffer = 7;      
     }
+
     else
       modal = modal_buffer;
-
-    onLED(modal+1, 0, 255, 0);
+    onLED(modal+1,0,255,0);
     delay(500);
-    onLED(N_PIXELS, 0, 0, 0);
+    onLED(N_PIXELS,0,0,0);
+    //Serial.println(modal);
   }
   
   if(abs(vol - pre_vol) > 1 && vol <= 127){
-    if (vol >= 127) vol = 127;
-    if (vol <= 1) vol = 0;
-    controllerChange(volume_cc, vol);
+    //Serial.println("vol");
+    if (vol >= 127)
+      vol = 127;
+    if (vol <= 1)
+      vol = 0;
+    controllerChange(volume_cc,vol);
     pre_vol = vol;
   }
-
   if(abs(mod_final - pre_mod) > 5){
-    if (mod_final < MOD_THRESHOLD)
-      controllerChange(mod_cc, 0);
-    else if (mod_final <= 127)
-      controllerChange(mod_cc, mod_final);
-      
+   
+    if (mod_final < MOD_THRESHOLD )
+      controllerChange(mod_cc,0);
+    else if ( mod_final <= 127 )
+      controllerChange(mod_cc,mod_final);
+       //Serial.println("mod");
     pre_mod = mod_final;    
   }
 }
-
-// Continue with other functions from the original code...
-
 
 void readButtons(){
   int up = digitalRead(TRANSPOSE_UP);
@@ -430,54 +434,76 @@ void unset(int i){
 
 
 
-void calibrate() {
+void calibrate(){
   if (1) {
   int btn = 1;
   Serial.println("calibrating...");
-
-  // Iterate over each string
-  for (int i = 0; i < N_STR; i++) {
+  for (int i=0; i<N_STR; i++) {
     //Flash the LED too indicate calibration
-    onLED(10, 250, 0, 0);
+    onLED(10,250,0,0);
+    delay(100);
+    clrLED();
+    onLED(10,250,0,0);
     delay(100);
     clrLED();
     onLED(10,250,0,0);
     delay(100);
     clrLED();
-    onLED(10,250,0,0);
-      delay(100);
-      clrLED();
-
-      // Iterate over each fret, starting from the last (highest fret) down to 0
-      short val;
-      for (int j = N_FRET - 1; j >= 0; j--) {
-        int response = false;
-
-        // Wait for the user to trigger calibration (e.g., pressing the fret)
-        while (!response) {
-          if (checkTriggered(i)) {
-            val = analogRead(S_pins[i]);  // Read sensor value when triggered
-            response = true;
-            //if (fretDefs[i][j] != val){
-              Serial.println(val);  
-            //}
-
-            // Store the calibration value directly in the fretDefs array
-            fretDefs[i][j] = val;
-          }
-          delay(10);  // Small delay to avoid overwhelming the system
-          onLED(10,250,0,0);
+  
+    short sensorMax = 0;
+    short sensorMin = 1023;
+    short val;
+    
+    //loop through the array of fret definitions
+    for (int j=N_FRET - 1; j>=0; j--) {
+      int response = false;
+      //wait for response
+      Serial.println("waiting");
+      while (!response) { 
+        if (checkTriggered(i)) {
+          val = (analogRead(S_pins[i]));
+          response = true;
+          //write to memory
+          clrLED();
+          int addr = j * sizeof(short) + (N_FRET*i*sizeof(short));
+          Serial.print("Writing ");
+          Serial.print(val);
+          Serial.print(" to address: ");
+          Serial.println(addr);
+          EEPROMWriteShort(addr, val);
         }
-
-        delay(100);  // Short delay between calibrating frets
-      }
+        delay(10);
+      } 
+      delay(100);
+      onLED(10,250,0,0);
     }
-
-    clrLED();  // Turn off LED after calibration is complete
+    for (int j=0; j<N_FRET; j++) {
+      short v = EEPROMReadShort(j * sizeof(short) + (N_FRET*i*sizeof(short)));
+      fretDefs[i][j] = v;
+    }
+  }
+  clrLED();
   }
 }
 
+void EEPROMWriteShort(int address, int value){
+  //One = Most significant -> Two = Least significant byte
+  byte two = (value & 0xFF);
+  byte one = ((value >> 8) & 0xFF);
 
+  //Write the 4 bytes into the eeprom memory.
+  EEPROM.write(address, two);
+  EEPROM.write(address + 1, one);
+}
+
+short EEPROMReadShort(int address){
+  //Read the 2 bytes from the eeprom memory.
+  long two = EEPROM.read(address);
+  long one = EEPROM.read(address + 1);
+
+  //Return the recomposed short by using bitshift.
+  return ((two << 0) & 0xFF) + ((one << 8) & 0xFFFF);
+}
 
 void onLED(int led,int red,int green, int blue){
   for(int i=0;i<led;i++){
@@ -504,11 +530,11 @@ short checkTriggered(int i){
   if(!T_active[i] && v > THRESH){
     T_active[i] = true;
     ret = v;
-    Serial.println("triggered");
+    //Serial.println("triggered");
   }
   else if(T_active[i] && v < THRESH - T_PAD){
     T_active[i] = false;
-    Serial.println("un-triggered");
+    //Serial.println("un-triggered");
   }
   //Serial.println(ret);
   return ret;
