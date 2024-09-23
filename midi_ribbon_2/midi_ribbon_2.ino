@@ -129,7 +129,7 @@ unsigned long last_read;
 
 DueFlashStorage flashStorage;
 unsigned int storageValidValue = 101;
-int storageValidAddress = 101;
+int storageValidAddress = 301;
 
 bool calibrateMode = false;
 
