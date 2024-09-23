@@ -128,7 +128,7 @@ int stickZeroY;
 unsigned long last_read;
 
 DueFlashStorage flashStorage;
-unsigned int storageValidValue = 101;
+uint16_t storageValidValue = 101;
 int storageValidAddress = 301;
 
 bool calibrateMode = false;
@@ -148,7 +148,7 @@ void setup() {
     //read fret definitions from Flash storage
     for (int i = 0; i < N_STR; i++) {
       for (int j = 0; j < N_FRET; j++) {
-        fretDefs[i][j] = FlashReadInt(j * sizeof(unsigned int) + (N_FRET * i * sizeof(unsigned int)));
+        fretDefs[i][j] = FlashReadInt(j * sizeof(uint16_t) + (N_FRET * i * sizeof(uint16_t)));
       }
     }
     Serial.begin(31250);
@@ -217,7 +217,7 @@ void setStorageAsValid() {
   FlashWriteInt(storageValidAddress, storageValidValue);
 }
 
-void FlashWriteInt(int address, unsigned int value) {
+void FlashWriteInt(int address, uint16_t value) {
   //One = Most significant -> Two = Least significant byte
   byte two = (value & 0xFF);
   byte one = ((value >> 8) & 0xFF);
@@ -227,7 +227,7 @@ void FlashWriteInt(int address, unsigned int value) {
   flashStorage.write(address + 1, one);
 }
 
-unsigned int FlashReadInt(int address) {
+uint16_t FlashReadInt(int address) {
   //Read the 2 bytes from the eeprom memory.
   long two = flashStorage.read(address);
   long one = flashStorage.read(address + 1);
@@ -489,7 +489,7 @@ void calibrate() {
     delay(100);
     clrLED();
 
-    unsigned int val;
+    uint16_t val;
 
     //loop through the array of fret definitions
     for (int j = N_FRET - 1; j >= 0; j--) {
@@ -504,7 +504,7 @@ void calibrate() {
           response = true;
           //write to memory
           clrLED();
-          int addr = j * sizeof(unsigned int) + (N_FRET * i * sizeof(unsigned int));
+          int addr = j * sizeof(uint16_t) + (N_FRET * i * sizeof(uint16_t));
           Serial.print("Writing ");
           Serial.print(val);
           Serial.print(" to address: ");
@@ -518,7 +518,7 @@ void calibrate() {
     }
 
     for (int j = 0; j < N_FRET; j++) {
-      unsigned int v = FlashReadInt(j * sizeof(unsigned int) + (N_FRET * i * sizeof(unsigned int)));
+      uint16_t v = FlashReadInt(j * sizeof(uint16_t) + (N_FRET * i * sizeof(uint16_t)));
       fretDefs[i][j] = v;
     }
   }
