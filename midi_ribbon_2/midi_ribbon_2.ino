@@ -36,7 +36,7 @@
 
 #define THRESH    600
 #define N_STR     2
-#define N_FRET    25
+#define N_FRET    5
 #define S_PAD     3
 #define T_PAD     300
 
@@ -60,7 +60,7 @@ int debounceDelay = 200;
 long ledDebounceTime = 0;
 int ledDebounceDelay = 20;
 
-short fretDefs[N_STR][N_FRET];
+uint16_t fretDefs[N_STR][N_FRET];
 
 int mod_final;
 int vol;
@@ -90,13 +90,13 @@ int modal_array [6][7] =  {{0, 2, 4, 5, 7, 9, 11}, //ionian
   {0, 2, 3, 5, 7, 8, 10}
 };    //aeolian
 
-short T_vals[N_STR];
+uint16_t T_vals[N_STR];
 bool T_active[] = {false, false, false, false}; //is it currently active
-short T_hit[N_STR];                             //has it been hit on this loop
+uint16_t T_hit[N_STR];                             //has it been hit on this loop
 int T_pins[] = {T0, T1, T2, T3};
 
-short S_vals[N_STR];                            //current sensor values
-short S_old[N_STR];                             //old sensor values for comparison
+uint16_t S_vals[N_STR];                            //current sensor values
+uint16_t S_old[N_STR];                             //old sensor values for comparison
 int S_active[N_STR];                            //currently active notes
 int S_pins[] = {S0, S1};
 int fretTouched[N_STR];
@@ -132,6 +132,7 @@ uint16_t storageValidValue = 101;
 int storageValidAddress = 301;
 
 bool calibrateMode = false;
+bool debugMode = false;
 
 QuickStats stats;
 
@@ -139,6 +140,7 @@ void setup() {
 
   if (!storageIsValid()) {
     calibrateMode = true;
+    debugMode = true; // keep this on until the arduino is reset
   }
 
   if (calibrateMode) {
@@ -176,10 +178,10 @@ void setup() {
   // Should be done only once
   if (calibrateMode) {
     calibrate();
-    
+
     // mark the calibration as valid, until the arduino is re-flashed.
     setStorageAsValid();
-    
+
     calibrateMode = false;
   }
 
@@ -197,7 +199,7 @@ void setup() {
 }
 
 void loop() {
-  readJoystick();
+  //readJoystick();
   readButtons();
   readModulationAndVol();
   readControls();
@@ -232,7 +234,7 @@ uint16_t FlashReadInt(int address) {
   long two = flashStorage.read(address);
   long one = flashStorage.read(address + 1);
 
-  //Return the recomposed short by using bitshift.
+  //Return the recomposed uint16_t by using bitshift.
   return ((two << 0) & 0xFF) + ((one << 8) & 0xFFFF);
 }
 
@@ -251,7 +253,6 @@ void readModulationAndVol() {
       modal = 7;
       modal_buffer = 7;
     }
-
     else
       modal = modal_buffer;
     onLED(modal + 1, 0, 255, 0);
@@ -325,17 +326,34 @@ void pickNotes() {
     if (T_hit[i]) {
       if (S_active[i]) {
         //turn off active note on this string
+
+        if (debugMode) {
+          Serial.print("picknoteoff: ");
+          Serial.println(S_active[i]);
+        }
+
         noteOff(0x80 + channel, S_active[i]);
-        //Serial.println("picknoteoff");
+
       }
       if (fretTouched[i] == 1) {
+        if (debugMode) {
+          Serial.print("picknoteoff: ");
+          Serial.println(S_active[i]);
+        }
+
         noteOff(0x80 + channel, S_active[i]);
         continue;
       }
       else {
         S_active[i] = fretTouched[i] + offsets[i];
+
+        if (debugMode) {
+          Serial.print("picknoteon: ");
+          Serial.println(S_active[i]);
+        }
+
         noteOn(0x90 + channel, S_active[i], 100);
-        //Serial.println("picknoteon");
+
       }
 
     }
@@ -348,6 +366,12 @@ void legatoTest() {
 
       int note = fretTouched[i] + offsets[i];
       if (note != S_active[i] && fretTouched[i] == -1) {
+
+        if (debugMode) {
+          Serial.print("legatonote_off: ");
+          Serial.println(S_active[i]);
+        }
+
         noteOff(0x80 + channel, S_active[i]);
 
         S_active[i] = note;
@@ -359,10 +383,20 @@ void legatoTest() {
       if (note != S_active[i] && (fretTouched[i] || T_active[i])) {
         //Serial.println("legatonote");
         int volume = mod_final * 2;
-        if (volume > 127)
+        if (volume > 127) {
           volume = 127;
+        }
+
+        if (debugMode) {
+          Serial.print("legatonote_on: ");
+          Serial.println(note);
+          Serial.print("legatonote_off: ");
+          Serial.println(S_active[i]);
+        }
+
         noteOn(0x90 + channel, note, 127);
         noteOff(0x80 + channel, S_active[i]);
+
         S_active[i] = note;
       }
     }
@@ -401,6 +435,10 @@ void legatoTest() {
 void cleanUp() {
   for (int i = 0; i < N_STR; i++) {
     if (S_active[i] && !fretTouched[i] && !T_active[i]) {
+      if (debugMode) {
+        Serial.print("cleanUp_noteoff: ");
+        Serial.println(S_active[i]);
+      }
       noteOff(0x80 + channel, S_active[i]);
       S_active[i] = 0;
     }
@@ -428,7 +466,7 @@ void determineFrets () {
   //---------Get Fret Numbers------
   for (int i = 0; i < N_STR; i++) {
 
-    short s_val = S_vals[i];
+    uint16_t s_val = S_vals[i];
 
     //check for open strings
     if (s_val == 0 ) {
@@ -519,6 +557,10 @@ void calibrate() {
 
     for (int j = 0; j < N_FRET; j++) {
       uint16_t v = FlashReadInt(j * sizeof(uint16_t) + (N_FRET * i * sizeof(uint16_t)));
+      Serial.print("Read ");
+      Serial.print(v);
+      Serial.print(" from address: ");
+      Serial.println(j * sizeof(uint16_t) + (N_FRET * i * sizeof(uint16_t)));
       fretDefs[i][j] = v;
     }
   }
@@ -542,22 +584,22 @@ void clrLED() {
 }
 
 //check if a trigger has been hit. Return 0 if not, the value of the trigger if it has
-short checkTriggered(int i) {
+uint16_t checkTriggered(int i) {
 
-  short v = analogRead(T_pins[i]);
+  uint16_t v = analogRead(T_pins[i]);
   //Serial.println(v);
   T_vals[i] = v;
-  short ret = 0;
+  uint16_t ret = 0;
   if (!T_active[i] && v > THRESH) {
     T_active[i] = true;
     ret = v;
-    if (calibrateMode){
+    if (calibrateMode) {
       Serial.println("triggered");
     }
   }
   else if (T_active[i] && v < THRESH - T_PAD) {
     T_active[i] = false;
-    if (calibrateMode){
+    if (calibrateMode) {
       Serial.println("un-triggered");
     }
   }
@@ -610,31 +652,37 @@ void readJoystick() {
 
 //note-on message
 void noteOn(int cmd, int pitch, int velocity) {
-
-  Serial.write(byte(cmd));
-  Serial.write(byte(pitch));
-  Serial.write(byte(velocity));
-  Serial.flush();
+  if (!debugMode) {
+    Serial.write(byte(cmd));
+    Serial.write(byte(pitch));
+    Serial.write(byte(velocity));
+    Serial.flush();
+  }
   digitalWrite(PIN_LED, HIGH);
 }
 //note-off message
 void noteOff(int cmd, int pitch) {
 
-  Serial.write(byte(cmd));
-  Serial.write(byte(pitch));
-  Serial.write(byte(0));
-  Serial.flush();
+  if (!debugMode) {
+    Serial.write(byte(cmd));
+    Serial.write(byte(pitch));
+    Serial.write(byte(0));
+    Serial.flush();
+  }
   digitalWrite(PIN_LED, LOW);
 }
 
 //Sends controller change to the specified controller
 void controllerChange(int controller, int value) {
   //Serial.println("cc");
-  int ch = 176 + channel;
-  Serial.write(byte(ch));
-  Serial.write(byte(controller));
-  Serial.write(byte(value));
-  Serial.flush();
+
+  if (!debugMode) {
+    int ch = 176 + channel;
+    Serial.write(byte(ch));
+    Serial.write(byte(controller));
+    Serial.write(byte(value));
+    Serial.flush();
+  }
 }
 
 
@@ -660,12 +708,16 @@ uint32_t Wheel(byte WheelPos) {
 
 
 void PitchWheelChange(int value) {
-  unsigned int change = 0x2000 + value;  //  0x2000 == No Change
-  unsigned char low = change & 0x7F;  // Low 7 bits
-  unsigned char high = (change >> 7) & 0x7F;  // High 7 bits
 
-  Serial.write(0xE0);
-  Serial.write(low);
-  Serial.write(high);
-  Serial.flush();
+  if (!debugMode)
+  {
+    unsigned int change = 0x2000 + value;  //  0x2000 == No Change
+    unsigned char low = change & 0x7F;  // Low 7 bits
+    unsigned char high = (change >> 7) & 0x7F;  // High 7 bits
+
+    Serial.write(0xE0);
+    Serial.write(low);
+    Serial.write(high);
+    Serial.flush();
+  }
 }
