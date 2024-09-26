@@ -36,7 +36,7 @@
 
 #define THRESH    600
 #define N_STR     2
-#define N_FRET    5
+#define N_FRET    2
 #define S_PAD     3
 #define T_PAD     300
 
@@ -331,7 +331,6 @@ void pickNotes() {
           Serial.print("picknoteoff: ");
           Serial.println(S_active[i]);
         }
-
         noteOff(0x80 + channel, S_active[i]);
 
       }
@@ -340,7 +339,6 @@ void pickNotes() {
           Serial.print("picknoteoff: ");
           Serial.println(S_active[i]);
         }
-
         noteOff(0x80 + channel, S_active[i]);
         continue;
       }
@@ -351,7 +349,6 @@ void pickNotes() {
           Serial.print("picknoteon: ");
           Serial.println(S_active[i]);
         }
-
         noteOn(0x90 + channel, S_active[i], 100);
 
       }
@@ -363,6 +360,25 @@ void pickNotes() {
 void legatoTest() {
   for (int i = 0; i < N_STR; i++) {
     if (S_active[i]) {
+
+	 if (i == 0)
+	 {
+		 
+		 uint16_t s_val = S_vals[i];
+		 
+		// midi pitch bend has 0 - 16383 with midpoint 8192
+		// 16 bit unsigned int is 0 - 65535
+ 
+		// map(value, fromLow, fromHigh, toLow, toHigh)
+
+		// Parameters
+		// value: the number to map.
+		// fromLow: the lower bound of the value’s current range.
+		// fromHigh: the upper bound of the value’s current range.
+		// toLow: the lower bound of the value’s target range.
+		// toHigh: the upper bound of the value’s target range.
+		 sendPitchBendMidiMessage(map(s_val,0,65535,0,16383));
+	 }
 
       int note = fretTouched[i] + offsets[i];
       if (note != S_active[i] && fretTouched[i] == -1) {
@@ -394,8 +410,10 @@ void legatoTest() {
           Serial.println(S_active[i]);
         }
 
+        // switch these around (temporary)
+		noteOff(0x80 + channel, S_active[i]);
         noteOn(0x90 + channel, note, 127);
-        noteOff(0x80 + channel, S_active[i]);
+        
 
         S_active[i] = note;
       }
@@ -654,7 +672,8 @@ void readJoystick() {
 void noteOn(int cmd, int pitch, int velocity) {
   if (!debugMode) {
     Serial.write(byte(cmd));
-    Serial.write(byte(pitch));
+    // Serial.write(byte(pitch));
+	Serial.write(byte(0x3C));
     Serial.write(byte(velocity));
     Serial.flush();
   }
@@ -665,7 +684,7 @@ void noteOff(int cmd, int pitch) {
 
   if (!debugMode) {
     Serial.write(byte(cmd));
-    Serial.write(byte(pitch));
+    Serial.write(byte(0x3C));
     Serial.write(byte(0));
     Serial.flush();
   }
@@ -720,4 +739,23 @@ void PitchWheelChange(int value) {
     Serial.write(high);
     Serial.flush();
   }
+}
+
+
+// int bend = constrain(pitchval + 0x2000, 0, 16383);
+// sendPitchBendMidiMessage(MIDIPitchBend, bend & 0x7F, (bend >> 7) & 0x7F, channel);
+
+
+
+void sendMidiMessage(byte param1, byte param2, byte channel) {
+	Serial.write(channel & 0x0F);
+	Serial.write(B11100000);	
+	Serial.write(param1 & 0x7F);
+	Serial.write(param2 & 0x7F);
+	Serial.flush();
+}
+
+// 0 - 16383 with midpoint 8192
+void sendPitchBendMidiMessage(int bend){
+	sendMidiMessage(bend & 0x7F, (bend >> 7) & 0x7F, 0x00);
 }
