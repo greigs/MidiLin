@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "JST2 switch")(type "KiCad")(uri "$(KIPRJMOD)/JST2 switch.pretty")(options "")(descr ""))
+)

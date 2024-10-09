@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 0)
+  (lib (name "JST2 switch-eagle-import")(type "KiCad")(uri "${KIPRJMOD}/JST2 switch-eagle-import.kicad_sym")(options "")(descr ""))
+)
