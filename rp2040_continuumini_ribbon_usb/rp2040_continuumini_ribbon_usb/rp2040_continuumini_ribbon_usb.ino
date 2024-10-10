@@ -57,7 +57,6 @@ void sendRandomMidiNote() {
     hostMidi->sendNoteOn(randomNote, randomVelocity, userChannel);
 
     usbhMIDI.writeFlushAll();
-    //MIDIuart.sendNoteOn(randomNote, randomVelocity, userChannel);
     if (serialDebug){
       Serial.printf("Sent random note on#%u, velocity=%u\r\n", randomNote, randomVelocity);
     }
@@ -65,7 +64,6 @@ void sendRandomMidiNote() {
     // After 250ms, turn the note off to prevent sustained notes
     delay(250);
     hostMidi->sendNoteOff(randomNote, 0, userChannel);
-    //MIDIuart.sendNoteOff(randomNote, 0, userChannel);
     if (serialDebug){
       Serial.printf("Sent note off#%u\r\n", randomNote);
     }
@@ -74,8 +72,6 @@ void sendRandomMidiNote() {
 
 static void midiPanic() {
     for (int i = 0; i < 128; i++) {
-        //MIDIusb.sendNoteOff(i, 0, userChannel);
-        //MIDIuart.sendNoteOff(i, 0, userChannel);
         if (serialDebug){
           Serial.printf("note %u off\r\n", i);
         }
@@ -84,8 +80,6 @@ static void midiPanic() {
 }
 
 static void onNoteOff(Channel channel, byte note, byte velocity) {
-    //MIDIusb.sendNoteOff(note, velocity, userChannel);
-    // MIDIuart.sendNoteOff(note, velocity, userChannel);
     if (serialDebug){
       Serial.printf("ch%u: Note off#%u v=%u\r\n", userChannel, note, velocity);
     }
@@ -93,8 +87,6 @@ static void onNoteOff(Channel channel, byte note, byte velocity) {
 }
 
 static void onNoteOn(Channel channel, byte note, byte velocity) {
-    // MIDIusb.sendNoteOn(note, velocity, userChannel);
-    // MIDIuart.sendNoteOn(note, velocity, userChannel);
     if (serialDebug){
       Serial.printf("ch%u: Note on#%u v=%u\r\n", userChannel, note, velocity);
     }
@@ -106,15 +98,11 @@ static void onPolyphonicAftertouch(Channel channel, byte note, byte amount)
   if (serialDebug){
     Serial.printf("ch%u: PAT#%u=%u\r\n", userChannel, note, amount);
   }
-    //MIDIusb.sendAfterTouch(note, amount, userChannel);
-    // MIDIuart.sendAfterTouch(note, amount, userChannel);
 }
 
 
 static void onControlChange(Channel channel, byte controller, byte value)
 {
-    //MIDIusb.sendControlChange(controller, value, userChannel);
-    // MIDIuart.sendControlChange(controller, value, userChannel);
     if (serialDebug){
       Serial.printf("Ch %u CC#%u=%u\r\n", userChannel, controller, value);
     }
@@ -129,8 +117,6 @@ static void onProgramChange(Channel channel, byte program)
   if (serialDebug){
     Serial.printf("ch%u: Prog=%u\r\n", userChannel, program);
   }
-    //MIDIusb.sendProgramChange(program + userProgOffset, userChannel);
-    // MIDIuart.sendProgramChange(program + userProgOffset, userChannel);
     last_cc_cntrl = 0;  // dirty this
     
 }
@@ -140,8 +126,6 @@ static void onAftertouch(Channel channel, byte value)
   if (serialDebug){
     Serial.printf("ch%u: AT=%u\r\n", userChannel, value);
   }
-    //MIDIusb.sendAfterTouch(value, userChannel);
-    // MIDIuart.sendAfterTouch(value, userChannel);
 }
 
 static void onPitchBend(Channel channel, int value)
@@ -149,8 +133,6 @@ static void onPitchBend(Channel channel, int value)
   if (serialDebug){
     Serial.printf("ch%u: PB=%d\r\n", userChannel, value);
   }
-    //MIDIusb.sendPitchBend(value, userChannel);
-    // MIDIuart.sendPitchBend(value, userChannel);
 }
 
 static void onSysEx(byte * array, unsigned size)
@@ -201,8 +183,6 @@ static void onSongPosition(unsigned beats)
   if (serialDebug){
     Serial.printf("SongP=%u\r\n", beats);
   }
-    //MIDIusb.sendSongPosition(beats);
-    // MIDIuart.sendSongPosition(beats);
 }
 
 static void onSongSelect(byte songnumber)
@@ -210,8 +190,6 @@ static void onSongSelect(byte songnumber)
   if (serialDebug){
     Serial.printf("SongS#%u\r\n", songnumber);
   }
-    //MIDIusb.sendSongSelect(songnumber);
-    // MIDIuart.sendSongSelect(songnumber);
 }
 
 static void onTuneRequest()
@@ -219,8 +197,6 @@ static void onTuneRequest()
   if (serialDebug){
     Serial.printf("Tune\r\n");
   }
-    //MIDIusb.sendTuneRequest();
-    // MIDIuart.sendTuneRequest();
 }
 
 static void onMidiClock()
@@ -228,8 +204,6 @@ static void onMidiClock()
   if (serialDebug){
     Serial.printf("Clock\r\n");
   }
-    //MIDIusb.sendClock();
-    // MIDIuart.sendClock();
 }
 
 static void onMidiStart()
@@ -237,8 +211,6 @@ static void onMidiStart()
   if (serialDebug){
     Serial.printf("Start\r\n");
   }
-    //MIDIusb.sendStart();
-    // MIDIuart.sendStart();
 }
 
 static void onMidiContinue()
@@ -246,8 +218,6 @@ static void onMidiContinue()
   if (serialDebug){
     Serial.printf("Cont\r\n");
   }
-    //MIDIusb.sendContinue();
-    // MIDIuart.sendContinue();
 }
 
 static void onMidiStop()
@@ -255,8 +225,6 @@ static void onMidiStop()
   if (serialDebug){
     Serial.printf("Stop\r\n");
   }
-    //MIDIusb.sendStop();
-    //  MIDIuart.sendStop();
 }
 
 static void onActiveSense()
