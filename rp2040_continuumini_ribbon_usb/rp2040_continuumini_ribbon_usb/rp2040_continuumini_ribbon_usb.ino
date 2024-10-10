@@ -5,6 +5,7 @@
 
 int userChannel = 1;  // 1-16
 int userProgOffset = 0;
+bool serialDebug = false;
 
 #include <MIDI.h>
 
@@ -24,8 +25,7 @@ USING_NAMESPACE_EZ_USB_MIDI_HOST
 RPPICOMIDI_EZ_USB_MIDI_HOST_INSTANCE(usbhMIDI, MidiHostSettingsDefault)
 
 Adafruit_USBD_MIDI usb_midi;                                  // USB MIDI object
-// MIDI_CREATE_INSTANCE(Adafruit_USBD_MIDI, usb_midi, MIDIusb);  // USB MIDI
-// MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDIuart);      // Serial MIDI over MIDI FeatherWing
+
 
 static uint8_t midiDevAddr = 0;
 static bool core0_booting = true;
@@ -35,9 +35,11 @@ midi::MidiInterface<EZ_USB_MIDI_HOST_Transport<MidiHostSettingsDefault>, MidiHos
 /* MIDI IN MESSAGE REPORTING */
 static void onMidiError(int8_t errCode)
 {
+  if (serialDebug){
     Serial.printf("MIDI Errors: %s %s %s\r\n", (errCode & (1UL << ErrorParse)) ? "Parse":"",
         (errCode & (1UL << ErrorActiveSensingTimeout)) ? "Active Sensing Timeout" : "",
         (errCode & (1UL << WarningSplitSysEx)) ? "Split SysEx":"");
+  }
 }
 
 // Time tracking for random MIDI note generation
@@ -56,13 +58,17 @@ void sendRandomMidiNote() {
 
     usbhMIDI.writeFlushAll();
     //MIDIuart.sendNoteOn(randomNote, randomVelocity, userChannel);
-    Serial.printf("Sent random note on#%u, velocity=%u\r\n", randomNote, randomVelocity);
+    if (serialDebug){
+      Serial.printf("Sent random note on#%u, velocity=%u\r\n", randomNote, randomVelocity);
+    }
 
     // After 250ms, turn the note off to prevent sustained notes
     delay(250);
     hostMidi->sendNoteOff(randomNote, 0, userChannel);
     //MIDIuart.sendNoteOff(randomNote, 0, userChannel);
-    Serial.printf("Sent note off#%u\r\n", randomNote);
+    if (serialDebug){
+      Serial.printf("Sent note off#%u\r\n", randomNote);
+    }
     usbhMIDI.writeFlushAll();
 }
 
@@ -70,7 +76,9 @@ static void midiPanic() {
     for (int i = 0; i < 128; i++) {
         //MIDIusb.sendNoteOff(i, 0, userChannel);
         //MIDIuart.sendNoteOff(i, 0, userChannel);
-        Serial.printf("note %u off\r\n", i);
+        if (serialDebug){
+          Serial.printf("note %u off\r\n", i);
+        }
         last_cc_cntrl = 0;  // dirty this
     }
 }
@@ -78,20 +86,26 @@ static void midiPanic() {
 static void onNoteOff(Channel channel, byte note, byte velocity) {
     //MIDIusb.sendNoteOff(note, velocity, userChannel);
     // MIDIuart.sendNoteOff(note, velocity, userChannel);
-    Serial.printf("ch%u: Note off#%u v=%u\r\n", userChannel, note, velocity);
+    if (serialDebug){
+      Serial.printf("ch%u: Note off#%u v=%u\r\n", userChannel, note, velocity);
+    }
     last_cc_cntrl = 0;
 }
 
 static void onNoteOn(Channel channel, byte note, byte velocity) {
     // MIDIusb.sendNoteOn(note, velocity, userChannel);
     // MIDIuart.sendNoteOn(note, velocity, userChannel);
-    Serial.printf("ch%u: Note on#%u v=%u\r\n", userChannel, note, velocity);
+    if (serialDebug){
+      Serial.printf("ch%u: Note on#%u v=%u\r\n", userChannel, note, velocity);
+    }
     last_cc_cntrl = 0;
 }
 
 static void onPolyphonicAftertouch(Channel channel, byte note, byte amount)
 {
+  if (serialDebug){
     Serial.printf("ch%u: PAT#%u=%u\r\n", userChannel, note, amount);
+  }
     //MIDIusb.sendAfterTouch(note, amount, userChannel);
     // MIDIuart.sendAfterTouch(note, amount, userChannel);
 }
@@ -101,7 +115,9 @@ static void onControlChange(Channel channel, byte controller, byte value)
 {
     //MIDIusb.sendControlChange(controller, value, userChannel);
     // MIDIuart.sendControlChange(controller, value, userChannel);
-    Serial.printf("Ch %u CC#%u=%u\r\n", userChannel, controller, value);
+    if (serialDebug){
+      Serial.printf("Ch %u CC#%u=%u\r\n", userChannel, controller, value);
+    }
     if (last_cc_cntrl != controller){
       last_cc_cntrl = controller;
     }
@@ -110,7 +126,9 @@ static void onControlChange(Channel channel, byte controller, byte value)
 
 static void onProgramChange(Channel channel, byte program)
 {
+  if (serialDebug){
     Serial.printf("ch%u: Prog=%u\r\n", userChannel, program);
+  }
     //MIDIusb.sendProgramChange(program + userProgOffset, userChannel);
     // MIDIuart.sendProgramChange(program + userProgOffset, userChannel);
     last_cc_cntrl = 0;  // dirty this
@@ -119,20 +137,25 @@ static void onProgramChange(Channel channel, byte program)
 
 static void onAftertouch(Channel channel, byte value)
 {
+  if (serialDebug){
     Serial.printf("ch%u: AT=%u\r\n", userChannel, value);
+  }
     //MIDIusb.sendAfterTouch(value, userChannel);
     // MIDIuart.sendAfterTouch(value, userChannel);
 }
 
 static void onPitchBend(Channel channel, int value)
 {
+  if (serialDebug){
     Serial.printf("ch%u: PB=%d\r\n", userChannel, value);
+  }
     //MIDIusb.sendPitchBend(value, userChannel);
     // MIDIuart.sendPitchBend(value, userChannel);
 }
 
 static void onSysEx(byte * array, unsigned size)
 {
+  if (serialDebug){
     Serial.printf("SysEx:\r\n");
     unsigned multipleOf8 = size/8;
     unsigned remOf8 = size % 8;
@@ -146,10 +169,12 @@ static void onSysEx(byte * array, unsigned size)
         Serial.printf("%02x ", *array++);
     }
     Serial.printf("\r\n");
+  }
 }
 
 static void onSMPTEqf(byte data)
 {
+  if (serialDebug){
     uint8_t type = (data >> 4) & 0xF;
     data &= 0xF;    
     static const char* fps[4] = {"24", "25", "30DF", "30ND"};
@@ -168,78 +193,101 @@ static void onSMPTEqf(byte data)
           Serial.printf("invalid SMPTE data byte %u\r\n", data);
           break;
     }
+  }
 }
 
 static void onSongPosition(unsigned beats)
 {
+  if (serialDebug){
     Serial.printf("SongP=%u\r\n", beats);
+  }
     //MIDIusb.sendSongPosition(beats);
     // MIDIuart.sendSongPosition(beats);
 }
 
 static void onSongSelect(byte songnumber)
 {
+  if (serialDebug){
     Serial.printf("SongS#%u\r\n", songnumber);
+  }
     //MIDIusb.sendSongSelect(songnumber);
     // MIDIuart.sendSongSelect(songnumber);
 }
 
 static void onTuneRequest()
 {
+  if (serialDebug){
     Serial.printf("Tune\r\n");
+  }
     //MIDIusb.sendTuneRequest();
     // MIDIuart.sendTuneRequest();
 }
 
 static void onMidiClock()
 {
+  if (serialDebug){
     Serial.printf("Clock\r\n");
+  }
     //MIDIusb.sendClock();
     // MIDIuart.sendClock();
 }
 
 static void onMidiStart()
 {
+  if (serialDebug){
     Serial.printf("Start\r\n");
+  }
     //MIDIusb.sendStart();
     // MIDIuart.sendStart();
 }
 
 static void onMidiContinue()
 {
+  if (serialDebug){
     Serial.printf("Cont\r\n");
+  }
     //MIDIusb.sendContinue();
     // MIDIuart.sendContinue();
 }
 
 static void onMidiStop()
 {
+  if (serialDebug){
     Serial.printf("Stop\r\n");
+  }
     //MIDIusb.sendStop();
     //  MIDIuart.sendStop();
 }
 
 static void onActiveSense()
 {
+  if (serialDebug){
     Serial.printf("ASen\r\n");
+  }
 }
 
 static void onSystemReset()
 {
+  if (serialDebug){
     Serial.printf("SysRst\r\n");
+  }
 }
 
 static void onMidiTick()
 {
+  if (serialDebug){
     Serial.printf("Tick\r\n");
+  }
 }
 
 static void onMidiInWriteFail(uint8_t devAddr, uint8_t cable, bool fifoOverflow)
 {
+  if (serialDebug){
     if (fifoOverflow)
         Serial.printf("Dev %u cable %u: MIDI IN FIFO overflow\r\n", devAddr, cable);
     else
         Serial.printf("Dev %u cable %u: MIDI IN FIFO error\r\n", devAddr, cable);
+  }
 }
 
 static void registerMidiInCallbacks()
@@ -280,13 +328,17 @@ static void registerMidiInCallbacks()
 
 // CONNECTION MANAGEMENT
 static void onMIDIconnect(uint8_t devAddr, uint8_t nInCables, uint8_t nOutCables) {
+  if (serialDebug){
     Serial.printf("MIDI device at address %u has %u IN cables and %u OUT cables\r\n", devAddr, nInCables, nOutCables);
+  }
     midiDevAddr = devAddr;
     registerMidiInCallbacks();
 }
 
 static void onMIDIdisconnect(uint8_t devAddr) {
+  if (serialDebug){
     Serial.printf("MIDI device at address %u unplugged\r\n", devAddr);
+  }
     midiDevAddr = 0;
 }
 
@@ -310,12 +362,16 @@ void setup1() {
         digitalWrite(18, HIGH);
     #endif
 
-    Serial.println("Core1 setup to run TinyUSB host with pio-usb\r\n");
+    if (serialDebug){
+        Serial.println("Core1 setup to run TinyUSB host with pio-usb\r\n");
+    }
 
     uint32_t cpu_hz = clock_get_hz(clk_sys);
     if (cpu_hz != 120000000UL && cpu_hz != 240000000UL) {
         delay(2000);  // wait for native usb
-        Serial.printf("Error: CPU Clock = %lu, PIO USB requires CPU clock must be multiple of 120 Mhz\r\n", cpu_hz);
+        if (serialDebug){
+          Serial.printf("Error: CPU Clock = %lu, PIO USB requires CPU clock must be multiple of 120 Mhz\r\n", cpu_hz);
+        }
         while (1) delay(1);
     }
 
@@ -334,18 +390,15 @@ void loop1() {
 }
 
 void setup() {
-    TinyUSBDevice.setManufacturerDescriptor("LarsCo");
-    TinyUSBDevice.setProductDescriptor("MIDI Masseuse");
-    Serial.begin(115200);
-
-
-    //MIDIusb.begin();
-    //MIDIusb.turnThruOff();   // turn off echo
-
-    // MIDIuart.begin(MIDI_CHANNEL_OMNI); // don't forget OMNI
-
+    TinyUSBDevice.setManufacturerDescriptor("ThereminHero");
+    TinyUSBDevice.setProductDescriptor("MIDI Device");
+    if (serialDebug){
+      Serial.begin(115200);
+    }
     pinMode(LED_BUILTIN, OUTPUT);
-    Serial.println("USB Host to MIDI Messenger\r\n");
+    if (serialDebug){
+      Serial.println("USB Host to MIDI Messenger\r\n");
+    }
     core0_booting = false;
     while (core1_booting);
 }
@@ -370,6 +423,4 @@ void loop() {
         // Send a random MIDI note
         sendRandomMidiNote();
     }
-
-    
 }
