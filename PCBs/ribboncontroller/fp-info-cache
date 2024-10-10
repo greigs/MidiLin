@@ -1,4 +1,4 @@
-24790199217144590
+24793656340992952
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -63545,6 +63545,13 @@ solder jumper open
 0
 5
 3
+KiCad
+2803812
+280381-2-1
+Connector
+0
+10
+10
 LED_SMD
 LED-APA102-2020
 http://www.led-color.com/upload/201604/APA102-2020%20SMD%20LED.pdf
@@ -100596,3 +100603,10 @@ Zigbee_Module_MRF24J40MD
 0
 12
 12
+footprints
+CON10_2X5_TR_SSQ_SAI
+
+SSQ-105-03-F-D-RA 
+0
+10
+10

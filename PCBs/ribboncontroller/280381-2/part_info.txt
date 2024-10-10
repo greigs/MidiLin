@@ -1,0 +1,9 @@
+Manufacturer=TE Connectivity
+PartNumber=280381-2
+PartCategory=Connector
+PackageCategory=Other
+PinCount=10
+Version=2.3
+Released=2022-06-27 14:40:12
+Downloaded=2024-10-10 16:18:08
+3D=Y
