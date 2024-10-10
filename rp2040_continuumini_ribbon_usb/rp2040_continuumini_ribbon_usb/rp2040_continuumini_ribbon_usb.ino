@@ -1,61 +1,8 @@
-// SPDX-FileCopyrightText: 2024 john park for Adafruit Industries
-//
-// SPDX-License-Identifier: MIT
-/**
- * For USB MIDI Host Feather RP2040 with mini OLED FeatherWing and MIDI FeatherWing
- * Modified 12 Jun 2024 - @todbot -- added USB MIDI forwarding
- * Modified by @johnedgarpark -- added UART MIDI forwarding and display/message filtering
- * originally from: https://github.com/rppicomidi/EZ_USB_MIDI_HOST/blob/main/examples/arduino/EZ_USB_MIDI_HOST_PIO_example/EZ_USB_MIDI_HOST_PIO_example.ino
- */
- 
- /* 
- * The MIT License (MIT)
- *
- * Copyright (c) 2023 rppicomidi
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *
- */
-
-/**
- * This demo program is designed to test the USB MIDI Host driver for a single USB
- * MIDI device connected to the USB Host port. It also
- * forwards MIDI received from the USB MIDI device to USB and UART MIDI devices.
- *
- * This program works with a single USB MIDI device connected via a USB hub, but it
- * does not handle multiple USB MIDI devices connected at the same time.
- * 
- *  Libraries (all available via library manager): 
- *  - MIDI -- https://github.com/FortySevenEffects/arduino_midi_library
-
- */
-// Be sure to set the CPU clock to 120MHz or 240MHz before uploading to board
-// USB Stack is TinyUSB
-// Press A to change output MIDI channel
-// Press B to change Program Change banks in groups of 8
-// Press C for MIDI panic
-
-
 #include <SPI.h>
 #include <Wire.h>
+#include <stdlib.h>  // For random number generation
 
-//Screen buttons
+// Screen buttons
 const int buttonAPin = 9;
 const int buttonBPin = 6;
 const int buttonCPin = 5;
@@ -70,16 +17,16 @@ unsigned long lastDebounceBTime = 0;
 unsigned long lastDebounceCTime = 0;
 unsigned long debounceDelay = 50;
 
-int userChannel = 1;  //1-16
+int userChannel = 1;  // 1-16
 int userProgOffset = 0;
-   
-#include <MIDI.h>  
+
+#include <MIDI.h>
 
 #if defined(USE_TINYUSB_HOST) || !defined(USE_TINYUSB)
 #error "Please use the Menu to select Tools->USB Stack: Adafruit TinyUSB"
 #endif
 #include "pio_usb.h"
-#define HOST_PIN_DP   16   // Pin used as D+ for host, D- = D+ + 1
+#define HOST_PIN_DP 16  // Pin used as D+ for host, D- = D+ + 1
 #include "EZ_USB_MIDI_HOST.h"
 
 // USB Host object
@@ -95,7 +42,6 @@ MIDI_CREATE_INSTANCE(Adafruit_USBD_MIDI, usb_midi, MIDIusb);  // USB MIDI
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDIuart);      // Serial MIDI over MIDI FeatherWing
 
 static uint8_t midiDevAddr = 0;
-
 static bool core0_booting = true;
 static bool core1_booting = true;
 
@@ -106,33 +52,51 @@ static void onMidiError(int8_t errCode)
         (errCode & (1UL << ErrorActiveSensingTimeout)) ? "Active Sensing Timeout" : "",
         (errCode & (1UL << WarningSplitSysEx)) ? "Split SysEx":"");
 }
+
+// Time tracking for random MIDI note generation
+unsigned long previousMillis = 0;  // Store last time a note was sent
+const long interval = 200;         // Interval at which to send a note (200ms)
+
 int last_cc_cntrl = 1;
 
-static void midiPanic()
-{
-    for (int i=0; i<128; i++)
-    {
-      MIDIusb.sendNoteOff(i, 0, userChannel);
-      MIDIuart.sendNoteOff(i, 0, userChannel);
-      Serial.printf("note %u off\r\n", i);
-      last_cc_cntrl = 0;  // dirty this
+// Function to send random MIDI note
+void sendRandomMidiNote() {
+    byte randomNote = random(60, 72); // Generate a random note between C4 (60) and B4 (72)
+    byte randomVelocity = random(50, 127); // Random velocity between 50 and 127
+
+    // Send the note to the USB MIDI and UART MIDI
+    MIDIusb.sendNoteOn(randomNote, randomVelocity, userChannel);
+    MIDIuart.sendNoteOn(randomNote, randomVelocity, userChannel);
+    Serial.printf("Sent random note on#%u, velocity=%u\r\n", randomNote, randomVelocity);
+
+    // After 100ms, turn the note off to prevent sustained notes
+    delay(100);
+    MIDIusb.sendNoteOff(randomNote, 0, userChannel);
+    MIDIuart.sendNoteOff(randomNote, 0, userChannel);
+    Serial.printf("Sent note off#%u\r\n", randomNote);
+}
+
+static void midiPanic() {
+    for (int i = 0; i < 128; i++) {
+        MIDIusb.sendNoteOff(i, 0, userChannel);
+        MIDIuart.sendNoteOff(i, 0, userChannel);
+        Serial.printf("note %u off\r\n", i);
+        last_cc_cntrl = 0;  // dirty this
     }
 }
 
-static void onNoteOff(Channel channel, byte note, byte velocity)
-{
+static void onNoteOff(Channel channel, byte note, byte velocity) {
     MIDIusb.sendNoteOff(note, velocity, userChannel);
     MIDIuart.sendNoteOff(note, velocity, userChannel);
     Serial.printf("ch%u: Note off#%u v=%u\r\n", userChannel, note, velocity);
-    last_cc_cntrl = 0; 
+    last_cc_cntrl = 0;
 }
 
-static void onNoteOn(Channel channel, byte note, byte velocity)
-{
+static void onNoteOn(Channel channel, byte note, byte velocity) {
     MIDIusb.sendNoteOn(note, velocity, userChannel);
     MIDIuart.sendNoteOn(note, velocity, userChannel);
     Serial.printf("ch%u: Note on#%u v=%u\r\n", userChannel, note, velocity);
-    last_cc_cntrl = 0; 
+    last_cc_cntrl = 0;
 }
 
 static void onPolyphonicAftertouch(Channel channel, byte note, byte amount)
@@ -321,102 +285,82 @@ static void registerMidiInCallbacks()
     dev->setOnMidiInWriteFail(onMidiInWriteFail);
 }
 
-/* CONNECTION MANAGEMENT */
-static void onMIDIconnect(uint8_t devAddr, uint8_t nInCables, uint8_t nOutCables)
-{
+// CONNECTION MANAGEMENT
+static void onMIDIconnect(uint8_t devAddr, uint8_t nInCables, uint8_t nOutCables) {
     Serial.printf("MIDI device at address %u has %u IN cables and %u OUT cables\r\n", devAddr, nInCables, nOutCables);
     midiDevAddr = devAddr;
     registerMidiInCallbacks();
 }
 
-static void onMIDIdisconnect(uint8_t devAddr)
-{
+static void onMIDIdisconnect(uint8_t devAddr) {
     Serial.printf("MIDI device at address %u unplugged\r\n", devAddr);
     midiDevAddr = 0;
 }
 
-
-/* MAIN LOOP FUNCTIONS */
-
-static void blinkLED(void)
-{
+// MAIN LOOP FUNCTIONS
+static void blinkLED(void) {
     const uint32_t intervalMs = 1000;
     static uint32_t startMs = 0;
-
     static bool ledState = false;
-    if ( millis() - startMs < intervalMs)
+    if (millis() - startMs < intervalMs) {
         return;
+    }
     startMs += intervalMs;
-
     ledState = !ledState;
-    digitalWrite(LED_BUILTIN, ledState ? HIGH:LOW); 
+    digitalWrite(LED_BUILTIN, ledState ? HIGH : LOW);
 }
-
-
 
 // core1's setup
 void setup1() {
-    #if ARDUINO_ADAFRUIT_FEATHER_RP2040_USB_HOST 
+    #if ARDUINO_ADAFRUIT_FEATHER_RP2040_USB_HOST
         pinMode(18, OUTPUT);  // Sets pin USB_HOST_5V_POWER to HIGH to enable USB power
         digitalWrite(18, HIGH);
     #endif
-  
-    //while(!Serial);   // wait for native usb
+
     Serial.println("Core1 setup to run TinyUSB host with pio-usb\r\n");
 
-    // Check for CPU frequency, must be multiple of 120Mhz for bit-banging USB
     uint32_t cpu_hz = clock_get_hz(clk_sys);
-    if ( cpu_hz != 120000000UL && cpu_hz != 240000000UL ) {
-        delay(2000);   // wait for native usb
-        Serial.printf("Error: CPU Clock = %lu, PIO USB require CPU clock must be multiple of 120 Mhz\r\n", cpu_hz);
-        Serial.printf("Change your CPU Clock to either 120 or 240 Mhz in Menu->CPU Speed \r\n");
-        while(1) delay(1);
+    if (cpu_hz != 120000000UL && cpu_hz != 240000000UL) {
+        delay(2000);  // wait for native usb
+        Serial.printf("Error: CPU Clock = %lu, PIO USB requires CPU clock must be multiple of 120 Mhz\r\n", cpu_hz);
+        while (1) delay(1);
     }
 
     pio_usb_configuration_t pio_cfg = PIO_USB_DEFAULT_CONFIG;
     pio_cfg.pin_dp = HOST_PIN_DP;
 
- 
     USBHost.configure_pio_usb(1, &pio_cfg);
-    // run host stack on controller (rhport) 1
-    // Note: For rp2040 pico-pio-usb, calling USBHost.begin() on core1 will have most of the
-    // host bit-banging processing work done in core1 to free up core0 for other work
     usbhMIDI.begin(&USBHost, 1, onMIDIconnect, onMIDIdisconnect);
     core1_booting = false;
-    while(core0_booting) ;
+    while (core0_booting);
 }
 
 // core1's loop
-void loop1()
-{
+void loop1() {
     USBHost.task();
 }
 
-void setup()
-{
+void setup() {
     TinyUSBDevice.setManufacturerDescriptor("LarsCo");
     TinyUSBDevice.setProductDescriptor("MIDI Masseuse");
     Serial.begin(115200);
 
+    pinMode(buttonAPin, INPUT_PULLUP);
+    pinMode(buttonBPin, INPUT);  // OLED button B as a 100k pullup on it on 128x32 FW
+    pinMode(buttonCPin, INPUT_PULLUP);
 
-  pinMode(buttonAPin, INPUT_PULLUP);
-  pinMode(buttonBPin, INPUT);  // OLED button B as a 100k pullup on it on 128x32 FW
-  pinMode(buttonCPin, INPUT_PULLUP);
-  
-    
     MIDIusb.begin();
     MIDIusb.turnThruOff();   // turn off echo
-    
+
     MIDIuart.begin(MIDI_CHANNEL_OMNI); // don't forget OMNI
-    
-//     while(!Serial);   // wait for serial port
+
     pinMode(LED_BUILTIN, OUTPUT);
     Serial.println("USB Host to MIDI Messenger\r\n");
     core0_booting = false;
-    while(core1_booting) ;
+    while (core1_booting);
 }
 
-void loop() {    
+void loop() {
     // Handle any incoming data; triggers MIDI IN callbacks
     usbhMIDI.readAll();
     // Do other processing that might generate pending MIDI OUT data
@@ -427,54 +371,61 @@ void loop() {
     // Do other non-USB host processing
     blinkLED();
 
+    // Check if 200ms has passed since the last note
+    unsigned long currentMillis = millis();
+    if (currentMillis - previousMillis >= interval) {
+        // Save the last time a note was sent
+        previousMillis = currentMillis;
+
+        // Send a random MIDI note
+        sendRandomMidiNote();
+    }
+
+    // Button handling logic
     int readingA = digitalRead(buttonAPin);
     int readingB = digitalRead(buttonBPin);
     int readingC = digitalRead(buttonCPin);
-    
+
     if (readingA != lastButtonAState) {
-      lastDebounceATime = millis();
+        lastDebounceATime = millis();
     }
     if (readingB != lastButtonBState) {
-      lastDebounceBTime = millis();
+        lastDebounceBTime = millis();
     }
     if (readingC != lastButtonCState) {
-      lastDebounceCTime = millis();
+        lastDebounceCTime = millis();
     }
 
     if ((millis() - lastDebounceATime) > debounceDelay) {
-      if (readingA != buttonAState) {
-        buttonAState = readingA;
-        if (buttonAState == LOW) {
-          userChannel = (userChannel % 16) + 1 ; // increment from 1-16
-          Serial.printf("Ch%u\r\n", userChannel);
+        if (readingA != buttonAState) {
+            buttonAState = readingA;
+            if (buttonAState == LOW) {
+                userChannel = (userChannel % 16) + 1; // increment from 1-16
+                Serial.printf("Ch%u\r\n", userChannel);
+            }
         }
-      }
     }
-
 
     if ((millis() - lastDebounceBTime) > debounceDelay) {
-      if (readingB != buttonBState) {
-        buttonBState = readingB;
-        if (buttonBState == LOW) {
-          userProgOffset = (userProgOffset + 8) % 128 ; 
-          Serial.printf("Prog Progs %u   through %u\r\n", userProgOffset, (userProgOffset + 7));
+        if (readingB != buttonBState) {
+            buttonBState = readingB;
+            if (buttonBState == LOW) {
+                userProgOffset = (userProgOffset + 8) % 128;
+                Serial.printf("Prog Progs %u through %u\r\n", userProgOffset, (userProgOffset + 7));
+            }
         }
-      }
     }
-
 
     if ((millis() - lastDebounceCTime) > debounceDelay) {
-      if (readingC != buttonCState) {
-        buttonCState = readingC;
-        if (buttonCState == LOW) {
-          midiPanic();
+        if (readingC != buttonCState) {
+            buttonCState = readingC;
+            if (buttonCState == LOW) {
+                midiPanic();
+            }
         }
-      }
     }
-    
+
     lastButtonAState = readingA;
     lastButtonBState = readingB;
     lastButtonCState = readingC;
-
-    
 }
