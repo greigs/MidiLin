@@ -122,14 +122,14 @@ void loop() {
 void pickNotes() {
   for (int i = 0; i < N_STR; i++) {
     if (S_active[i]) {
-      noteOff(0x80 + channel, S_active[i]);
+      //noteOff(0x80 + channel, S_active[i]);
     }
     if (fretTouched[i] == 1) {
-      noteOff(0x80 + channel, S_active[i]);
+      //noteOff(0x80 + channel, S_active[i]);
       continue;
     } else {
       S_active[i] = fretTouched[i] + offsets[i];
-      noteOn(0x90 + channel, S_active[i], 100);
+      //noteOn(0x90 + channel, S_active[i], 100);
     }
   }
 }
@@ -163,7 +163,7 @@ void legatoTest() {
 void cleanUp() {
   for (int i = 0; i < N_STR; i++) {
     if (S_active[i] && !fretTouched[i]) {
-      noteOff(0x80 + channel, S_active[i]);
+      //noteOff(0x80 + channel, S_active[i]);
       S_active[i] = 0;
     }
   }
