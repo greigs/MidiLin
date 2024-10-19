@@ -31,7 +31,7 @@ static uint8_t x_data, y_data, button_data;
 
 int userChannel = 1;  // 1-16
 int userProgOffset = 0;
-bool serialDebug = true;
+bool serialDebug = false;
 
 #if defined(USE_TINYUSB_HOST) || !defined(USE_TINYUSB)
 #error "Please use the Menu to select Tools->USB Stack: Adafruit TinyUSB"
@@ -126,6 +126,7 @@ int channel = MIDI_CHANNEL;
 bool isPitchBend = false;
 unsigned int pitchBendLight = 0;
 bool dim = false;
+int defaultMidiNoteForString[2] = {24,48};
 
 int modal_array [6][7] =  {{0, 2, 4, 5, 7, 9, 11}, //ionian
   {0, 2, 3, 5, 7, 9, 10}, //dorian
@@ -544,55 +545,55 @@ void loop() {
 
 
     // Do other non-USB host processing
-    delay(10);
-    blinkLED();
+    // delay(10);
+    // blinkLED();
     
 
 
-    // Handle Joystick I2C communication
-    Wire.requestFrom(JOY_ADDR, 3);
-    if (Wire.available()) {
-        x_data = Wire.read();
-        y_data = Wire.read();
-        button_data = Wire.read();
-        // Print joystick data to the serial monitor
-        sprintf(data, "Joystick x:%d y:%d button:%d\n", x_data, y_data, button_data);
-        Serial.print(data);
-    }
+    // // Handle Joystick I2C communication
+    // Wire.requestFrom(JOY_ADDR, 3);
+    // if (Wire.available()) {
+    //     x_data = Wire.read();
+    //     y_data = Wire.read();
+    //     button_data = Wire.read();
+    //     // Print joystick data to the serial monitor
+    //     sprintf(data, "Joystick x:%d y:%d button:%d\n", x_data, y_data, button_data);
+    //     Serial.print(data);
+    // }
 
-    // ********** Handle seesaw gamepad **********
-    // Read analog values for x and y from seesaw
-    int x = 1023 - ss.analogRead(14);  // Reverse x value
-    int y = 1023 - ss.analogRead(15);  // Reverse y value
+    // // ********** Handle seesaw gamepad **********
+    // // Read analog values for x and y from seesaw
+    // int x = 1023 - ss.analogRead(14);  // Reverse x value
+    // int y = 1023 - ss.analogRead(15);  // Reverse y value
 
-    // Print x and y values if significant change is detected
-    if ((abs(x - last_x) > 3) || (abs(y - last_y) > 3)) {
-        Serial.print("Gamepad x: "); Serial.print(x); Serial.print(", y: "); Serial.println(y);
-        last_x = x;
-        last_y = y;
-    }
+    // // Print x and y values if significant change is detected
+    // if ((abs(x - last_x) > 3) || (abs(y - last_y) > 3)) {
+    //     Serial.print("Gamepad x: "); Serial.print(x); Serial.print(", y: "); Serial.println(y);
+    //     last_x = x;
+    //     last_y = y;
+    // }
 
-    // Read button states
-    uint32_t buttons = ss.digitalReadBulk(button_mask);
+    // // Read button states
+    // uint32_t buttons = ss.digitalReadBulk(button_mask);
 
-    if (!(buttons & (1UL << BUTTON_A))) {
-        Serial.println("Button A pressed");
-    }
-    if (!(buttons & (1UL << BUTTON_B))) {
-        Serial.println("Button B pressed");
-    }
-    if (!(buttons & (1UL << BUTTON_Y))) {
-        Serial.println("Button Y pressed");
-    }
-    if (!(buttons & (1UL << BUTTON_X))) {
-        Serial.println("Button X pressed");
-    }
-    if (!(buttons & (1UL << BUTTON_SELECT))) {
-        Serial.println("Button SELECT pressed");
-    }
-    if (!(buttons & (1UL << BUTTON_START))) {
-        Serial.println("Button START pressed");
-    } 
+    // if (!(buttons & (1UL << BUTTON_A))) {
+    //     Serial.println("Button A pressed");
+    // }
+    // if (!(buttons & (1UL << BUTTON_B))) {
+    //     Serial.println("Button B pressed");
+    // }
+    // if (!(buttons & (1UL << BUTTON_Y))) {
+    //     Serial.println("Button Y pressed");
+    // }
+    // if (!(buttons & (1UL << BUTTON_X))) {
+    //     Serial.println("Button X pressed");
+    // }
+    // if (!(buttons & (1UL << BUTTON_SELECT))) {
+    //     Serial.println("Button SELECT pressed");
+    // }
+    // if (!(buttons & (1UL << BUTTON_START))) {
+    //     Serial.println("Button START pressed");
+    // } 
     
     
 
@@ -632,8 +633,10 @@ void legatoTest() {
   for (int i = 0; i < N_STR; i++) {
     if (S_active[i]) {
       if (i == 0 && fretTouched[0] > 1) {
-        uint16_t s_val = S_vals[i];
-        sendPitchBendMidiMessage(map(s_val, 0, 65535, 0, 16383));
+        long s_val = (long)S_vals[i];
+        
+        sendPitchBendMidiMessage(map(s_val, 1000, 63000, 0, 16383));
+        //Serial.println(s_val + ", " + map(s_val, 1000, 63000, 0, 16383));
       }
       int note = fretTouched[i] + offsets[i];
       if (note != S_active[i] && fretTouched[i] == -1) {
@@ -686,7 +689,7 @@ void determineFrets() {
     } else {
       if (s_val >= 1000 && s_val < 62000 && abs((int)s_val - (int)S_old[i]) > S_PAD) {
         S_old[i] = s_val;
-        fretTouched[i] = 20;
+        fretTouched[i] = defaultMidiNoteForString[i];
       }
     }
   }
@@ -755,14 +758,12 @@ void transpose(int dir) {
 
 void noteOn(int cmd, int pitch, int velocity) {
     hostMidi->sendNoteOn(pitch, velocity, userChannel);
-    usbhMIDI.writeFlushAll();
     Serial.printf("Note On\r\n");
    
 }
 
 void noteOff(int cmd, int pitch) {
-    hostMidi->sendNoteOff(pitch, 127, userChannel);
-    usbhMIDI.writeFlushAll();
+    hostMidi->sendNoteOff(pitch, 0, userChannel);
     Serial.printf("Note Off\r\n");
 }
 
@@ -785,7 +786,11 @@ void sendMidiMessage(byte param1, byte param2, byte channel) {
 }
 
 void sendPitchBendMidiMessage(int bend) {
-  sendMidiMessage(bend & 0x7F, (bend >> 7) & 0x7F, 0x00);
+  int mappedBend = (int)map(bend,0, 16383,MIDI_PITCHBEND_MIN/4,MIDI_PITCHBEND_MAX/4);
+  hostMidi->sendPitchBend(mappedBend, userChannel);
+  Serial.printf("ch%u: PB=%d\r\n", userChannel, mappedBend);
+  
+  //sendMidiMessage(bend & 0x7F, (bend >> 7) & 0x7F, 0x00);
 }
 
 
