@@ -1,0 +1,8 @@
+"Reference","Value","Datasheet","Footprint","Qty","DNP"
+"A2","Adafruit_Feather_Generic","https://cdn-learn.adafruit.com/downloads/pdf/adafruit-feather.pdf","Module:Adafruit_Feather","1",""
+"J1","280381-2","https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=280377&DocType=Customer+Drawing&DocLang=English","KiCad:2803812","1",""
+"J2,J3","0022232041","https://www.molex.com/pdm_docs/sd/022232041_sd.pdf","digikey-footprints:PinHeader_1x4_P2.54mm_Drill1.02mm","2",""
+"R1,R2,R3,R4","R","~","Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder","4",""
+"R5,R6,R7,R8","3386P-1-103TLF","3386P-1-103TLF","footprints2:POT_3386P","4",""
+"SW1","DPDT-EG1390","","JST2 switch:EG1390","1",""
+"X1","CON_JST_PH_2PIN","","JST2 switch:JSTPH2","1",""

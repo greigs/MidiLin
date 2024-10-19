@@ -1068,512 +1068,6 @@
 				)
 			)
 		)
-		(symbol "JST2 switch-eagle-import:DPDT-EG1390"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "SW"
-				(at -8.255 -1.905 90)
-				(effects
-					(font
-						(size 1.778 1.5113)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Value" ""
-				(at -5.715 2.54 90)
-				(effects
-					(font
-						(size 1.778 1.5113)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Footprint" "JST2 switch:EG1390"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_locked" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "DPDT-EG1390_1_0"
-				(polyline
-					(pts
-						(xy -6.35 -1.905) (xy -5.08 -1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -6.35 0) (xy -6.35 -1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -6.35 0) (xy -4.445 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -6.35 1.905) (xy -6.35 0)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -6.35 1.905) (xy -5.08 1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.175 0) (xy -3.81 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.54 2.54) (xy -2.54 3.175)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.54 2.54) (xy -1.27 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.905 0) (xy -2.54 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.889 0) (xy -1.27 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -3.175) (xy 0 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -2.54) (xy -1.905 3.175)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 2.54) (xy 2.54 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 2.54 3.175)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at -2.54 5.08 270)
-					(length 2.54)
-					(name "O"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-					(number "O1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -5.08 90)
-					(length 2.54)
-					(name "P"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-					(number "P1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 5.08 270)
-					(length 2.54)
-					(name "S"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-					(number "S1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "DPDT-EG1390_2_0"
-				(polyline
-					(pts
-						(xy -6.35 -1.905) (xy -5.08 -1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -6.35 0) (xy -6.35 -1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -6.35 0) (xy -4.445 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -6.35 1.905) (xy -6.35 0)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -6.35 1.905) (xy -5.08 1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.175 0) (xy -3.81 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.54 2.54) (xy -2.54 3.175)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.54 2.54) (xy -1.27 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.905 0) (xy -2.54 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.889 0) (xy -1.27 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -3.175) (xy 0 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -2.54) (xy -1.905 3.175)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 2.54) (xy 2.54 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 2.54 3.175)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at -2.54 5.08 270)
-					(length 2.54)
-					(name "O"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-					(number "O2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -5.08 90)
-					(length 2.54)
-					(name "P"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-					(number "P2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 5.08 270)
-					(length 2.54)
-					(name "S"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-					(number "S2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "MCU_Module:Adafruit_Feather_Generic"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -2445,6 +1939,468 @@
 				)
 			)
 		)
+		(symbol "dk_Slide-Switches:JS202011SCQN"
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "S"
+				(at -3.81 8.255 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "JS202011SCQN"
+				(at 0 -11.43 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "digikey-footprints:Switch_Slide_JS202011SCQN"
+				(at 5.08 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.ckswitches.com/media/1422/js.pdf"
+				(at 5.08 7.62 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "SWITCH SLIDE DPDT 300MA 6V"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Digi-Key_PN" "401-2002-1-ND"
+				(at 5.08 10.16 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "MPN" "JS202011SCQN"
+				(at 5.08 12.7 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Category" "Switches"
+				(at 5.08 15.24 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Family" "Slide Switches"
+				(at 5.08 17.78 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "DK_Datasheet_Link" "https://www.ckswitches.com/media/1422/js.pdf"
+				(at 5.08 20.32 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "DK_Detail_Page" "/product-detail/en/c-k/JS202011SCQN/401-2002-1-ND/1640098"
+				(at 5.08 22.86 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description_1" "SWITCH SLIDE DPDT 300MA 6V"
+				(at 5.08 25.4 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "C&K"
+				(at 5.08 27.94 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status" "Active"
+				(at 5.08 30.48 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "401-2002-1-ND JS"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "JS202011SCQN_0_1"
+				(circle
+					(center -2.54 -5.08)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center -2.54 5.08)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -5.08) (xy 3.302 -2.794)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 5.08) (xy 3.302 7.366)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -3.81) (xy 0 -4.191)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 0 -3.175)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -1.27) (xy 0 -1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -0.635)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.27) (xy 0 0.635)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0 1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 3.81) (xy 0 3.175)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 5.08) (xy 0 4.445)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 5.969) (xy 0 5.715)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.54 -7.62)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 2.54 -2.54)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 2.54 2.54)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 2.54 7.62)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+			)
+			(symbol "JS202011SCQN_1_1"
+				(pin passive line
+					(at 5.08 7.62 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 2.54 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -7.62 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "power:+3.3V"
 			(power)
 			(pin_numbers hide)
@@ -2987,12 +2943,6 @@
 		)
 	)
 	(junction
-		(at 54.61 120.65)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "01c37f9b-bd03-416e-b194-cb682d8cce2b")
-	)
-	(junction
 		(at 134.62 97.79)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3047,10 +2997,10 @@
 		(uuid "84c8b424-fc48-4292-88e7-af45c338af78")
 	)
 	(junction
-		(at 67.31 129.54)
+		(at 46.99 129.54)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "8a77d968-7b4f-41e2-8eb6-85689e9adf93")
+		(uuid "8f44d16f-6022-4aef-b72d-febbd063ce28")
 	)
 	(junction
 		(at 96.52 127)
@@ -3069,6 +3019,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b61127e7-bbb2-4f36-8d92-81970e381b2b")
+	)
+	(junction
+		(at 33.02 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bb1a9830-b831-46c2-9fbb-8876f8e661df")
 	)
 	(junction
 		(at 116.84 130.81)
@@ -3113,6 +3069,10 @@
 		(uuid "f75aca5b-834a-4825-a279-89c586663004")
 	)
 	(no_connect
+		(at 36.83 121.92)
+		(uuid "072d2b70-33d3-4332-b162-fd3ebefac0e6")
+	)
+	(no_connect
 		(at 99.06 106.68)
 		(uuid "07d5b48c-5f50-45b0-b1d3-50fc36b7be06")
 	)
@@ -3123,10 +3083,6 @@
 	(no_connect
 		(at 99.06 99.06)
 		(uuid "387ec026-5477-4e0f-9cc9-7a570192cb8d")
-	)
-	(no_connect
-		(at 57.15 125.73)
-		(uuid "4d30b800-f268-44e7-b802-54abde18aae0")
 	)
 	(no_connect
 		(at 99.06 83.82)
@@ -3153,10 +3109,6 @@
 		(uuid "68e2da3f-a074-4b68-8465-896469e53e33")
 	)
 	(no_connect
-		(at 57.15 138.43)
-		(uuid "8575d35b-1052-43f6-8846-d7b58a661de7")
-	)
-	(no_connect
 		(at 99.06 91.44)
 		(uuid "8852839a-c3d2-4c2d-a6f0-8e321d6262e4")
 	)
@@ -3171,6 +3123,10 @@
 	(no_connect
 		(at 99.06 81.28)
 		(uuid "a4bf70a1-5e18-4bc3-9f04-bafc1103bf96")
+	)
+	(no_connect
+		(at 36.83 132.08)
+		(uuid "b410ea30-55d4-4b9d-bf34-9c124cfd613b")
 	)
 	(no_connect
 		(at 99.06 109.22)
@@ -3412,26 +3368,6 @@
 	)
 	(wire
 		(pts
-			(xy 54.61 120.65) (xy 54.61 49.53)
-		)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(uuid "2bfa4400-2d51-4b11-9ab9-e9d15381ed83")
-	)
-	(wire
-		(pts
-			(xy 57.15 120.65) (xy 54.61 120.65)
-		)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(uuid "300884ee-dcb5-444a-9454-a82151dddda5")
-	)
-	(wire
-		(pts
 			(xy 139.7 85.09) (xy 135.89 85.09)
 		)
 		(stroke
@@ -3442,6 +3378,26 @@
 	)
 	(wire
 		(pts
+			(xy 33.02 127) (xy 33.02 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "313a0b01-93f8-46d2-a333-c4f39d1254c4")
+	)
+	(wire
+		(pts
+			(xy 49.53 129.54) (xy 46.99 129.54)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "31b3d42c-c9fa-458d-b26b-14b6cba928ff")
+	)
+	(wire
+		(pts
 			(xy 99.06 127) (xy 111.76 127)
 		)
 		(stroke
@@ -3449,16 +3405,6 @@
 			(type default)
 		)
 		(uuid "334c4edc-dc26-4b8b-83a7-0bacc1b98052")
-	)
-	(wire
-		(pts
-			(xy 67.31 129.54) (xy 67.31 135.89)
-		)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(uuid "383b71d7-11a1-495f-8cce-e7183313e64f")
 	)
 	(wire
 		(pts
@@ -3512,6 +3458,16 @@
 	)
 	(wire
 		(pts
+			(xy 33.02 104.14) (xy 54.61 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "49168805-97a7-404d-afee-feaf5b8cc2c2")
+	)
+	(wire
+		(pts
 			(xy 125.73 88.9) (xy 124.46 88.9)
 		)
 		(stroke
@@ -3562,16 +3518,6 @@
 	)
 	(wire
 		(pts
-			(xy 57.15 133.35) (xy 57.15 132.08)
-		)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(uuid "529862a7-cafe-4d05-9e84-ed763d695ee2")
-	)
-	(wire
-		(pts
 			(xy 134.62 72.39) (xy 134.62 76.2)
 		)
 		(stroke
@@ -3609,6 +3555,16 @@
 			(type default)
 		)
 		(uuid "5766394a-5f6b-4f3a-889a-9ff696a3929d")
+	)
+	(wire
+		(pts
+			(xy 36.83 137.16) (xy 33.02 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "57d8a2c5-5ef4-40e7-b1ed-a0a08eea922e")
 	)
 	(wire
 		(pts
@@ -3702,16 +3658,6 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 123.19) (xy 67.31 129.54)
-		)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(uuid "7e1bc10d-8694-45c9-bf4e-096a026b8eb4")
-	)
-	(wire
-		(pts
 			(xy 109.22 140.97) (xy 109.22 129.54)
 		)
 		(stroke
@@ -3729,6 +3675,26 @@
 			(type default)
 		)
 		(uuid "7fbabef3-19e9-47b1-be5c-feeeddb454e9")
+	)
+	(wire
+		(pts
+			(xy 49.53 140.97) (xy 49.53 129.54)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "8bddf1a7-56f4-4eba-a8be-b9204ae553dc")
+	)
+	(wire
+		(pts
+			(xy 46.99 124.46) (xy 46.99 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8cf39c1e-7a40-42b0-b0c2-89e322b3df9c")
 	)
 	(wire
 		(pts
@@ -3822,6 +3788,16 @@
 	)
 	(wire
 		(pts
+			(xy 68.58 140.97) (xy 49.53 140.97)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "a94c641b-0a9f-4559-bb54-38cd8a1ea38c")
+	)
+	(wire
+		(pts
 			(xy 142.24 83.82) (xy 132.08 83.82)
 		)
 		(stroke
@@ -3849,6 +3825,26 @@
 			(type default)
 		)
 		(uuid "ae657cef-63b7-4254-9e01-ef63d43aec55")
+	)
+	(wire
+		(pts
+			(xy 33.02 137.16) (xy 33.02 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "af93cac7-9864-421f-a41c-ab7581a5ea4f")
+	)
+	(wire
+		(pts
+			(xy 46.99 129.54) (xy 46.99 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b17fb0b8-97c2-44ee-b582-644f39441d24")
 	)
 	(wire
 		(pts
@@ -3882,13 +3878,13 @@
 	)
 	(wire
 		(pts
-			(xy 57.15 132.08) (xy 54.61 129.54)
+			(xy 68.58 129.54) (xy 71.12 129.54)
 		)
 		(stroke
 			(width 0.1524)
 			(type solid)
 		)
-		(uuid "b7617a80-c416-472d-a3e2-8a441d79ab6e")
+		(uuid "b547bff4-e019-4302-9a40-9703940c5c2d")
 	)
 	(wire
 		(pts
@@ -3899,6 +3895,16 @@
 			(type default)
 		)
 		(uuid "c097e99b-ad10-4493-be3c-a8c23a63b72f")
+	)
+	(wire
+		(pts
+			(xy 54.61 104.14) (xy 54.61 49.53)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "c1122e0d-5d2a-4cd8-952d-bade65f523b8")
 	)
 	(wire
 		(pts
@@ -3942,6 +3948,16 @@
 	)
 	(wire
 		(pts
+			(xy 68.58 129.54) (xy 68.58 140.97)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "ca55bcd2-625c-43f7-a424-e4d4146bcb34")
+	)
+	(wire
+		(pts
 			(xy 120.65 60.96) (xy 127 60.96)
 		)
 		(stroke
@@ -3959,16 +3975,6 @@
 			(type default)
 		)
 		(uuid "cfa95a93-4b0f-45e7-a5a6-844955db3c84")
-	)
-	(wire
-		(pts
-			(xy 54.61 120.65) (xy 54.61 129.54)
-		)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(uuid "d39ac573-aa81-4fd3-bb4e-673890ba2e2d")
 	)
 	(wire
 		(pts
@@ -4072,16 +4078,6 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 129.54) (xy 71.12 129.54)
-		)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(uuid "ebbc107c-4228-4002-a7e6-f5c54b8b34be")
-	)
-	(wire
-		(pts
 			(xy 147.32 93.98) (xy 161.29 93.98)
 		)
 		(stroke
@@ -4122,6 +4118,16 @@
 	)
 	(wire
 		(pts
+			(xy 33.02 127) (xy 36.83 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fb6b48af-af7c-40c4-b48c-b0cee42059fa")
+	)
+	(wire
+		(pts
 			(xy 114.3 140.97) (xy 114.3 127)
 		)
 		(stroke
@@ -4140,15 +4146,25 @@
 		)
 		(uuid "fd6ac9c7-f221-49da-9471-b14823953e84")
 	)
-	(text "10 gnd1 (w)\n 9 sig1 (y)\n  8 3.3v1 (r)\n  7 3.3v2 (r)\n  6 sig2 (y)\n  5 gnd3 (w)\n  4 sig3 (y)\n  3 3.3v3 (r)\n  2 3.3v4 (r)\n  1 sig4 (y)"
+	(text "1 sig1 (y) | 2 3.3v1 (r) | 3 3.3v2 (r) | 4 sig2 (y) | 5 gnd2 (w) | 6 sig3 (y) | 7 3.3v3 (r) | 8 3.3v4 (r) | 9 sig4 (y) | 10 gnd4 (w)"
 		(exclude_from_sim no)
-		(at 88.646 156.718 0)
+		(at 106.934 167.894 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "1010eded-5adb-4583-9309-0dc7b6f19fdb")
+		(uuid "352f25ef-a5f6-48ba-8f76-9ba957e0b620")
+	)
+	(text "A3 -> 1 sig1 (y) 2-wire left string\nA2 -> 4 sig2 (y) 3-wire left string\nA1 -> 6 sig3 (y) 2-wire right string\nA0 -> 9 sig4 (y) 3-wire right string"
+		(exclude_from_sim no)
+		(at 108.712 184.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "88603422-80a9-42c8-8287-a4f784d4d127")
 	)
 	(symbol
 		(lib_id "power:GND")
@@ -4569,7 +4585,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "342ec37b-95d9-4185-8e9d-0fa02d8f0287")
 		(property "Reference" "J1"
 			(at 125.73 149.8599 90)
@@ -4924,90 +4939,6 @@
 		)
 	)
 	(symbol
-		(lib_id "JST2 switch-eagle-import:DPDT-EG1390")
-		(at 62.23 123.19 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "5cd589ce-5dac-46f4-bcf6-e01bb273ede9")
-		(property "Reference" "SW1"
-			(at 64.135 114.935 90)
-			(effects
-				(font
-					(size 1.778 1.5113)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Value" "DPDT-EG1390"
-			(at 59.69 117.475 90)
-			(effects
-				(font
-					(size 1.778 1.5113)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "JST2 switch:EG1390"
-			(at 62.23 123.19 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 62.23 123.19 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 62.23 123.19 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "P1"
-			(uuid "0e8706a1-d174-4052-8964-c71ae7ca11da")
-		)
-		(pin "O2"
-			(uuid "664e142d-4958-46c2-a4b2-3c654b2f249b")
-		)
-		(pin "O1"
-			(uuid "81352de0-feb4-44aa-b693-f33bc9047477")
-		)
-		(pin "S1"
-			(uuid "ea8965eb-3f59-4ff7-8d58-b15abfb748b5")
-		)
-		(pin "P2"
-			(uuid "5e55b25c-aa29-4098-917d-d96ed635faee")
-		)
-		(pin "S2"
-			(uuid "4b6de30e-1822-4c64-9893-55dd6f7c1231")
-		)
-		(instances
-			(project "ribboncontroller"
-				(path "/f5827886-e161-4fb4-ab61-26dbf0f779d6"
-					(reference "SW1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 88.9 128.27 180)
 		(unit 1)
@@ -5283,89 +5214,6 @@
 		)
 	)
 	(symbol
-		(lib_id "JST2 switch-eagle-import:DPDT-EG1390")
-		(at 62.23 135.89 90)
-		(mirror x)
-		(unit 2)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "8ff417be-1116-47d2-91e8-11dc30d68258")
-		(property "Reference" "SW1"
-			(at 64.135 127.635 90)
-			(effects
-				(font
-					(size 1.778 1.5113)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Value" "DPDT-EG1390"
-			(at 59.69 130.175 90)
-			(effects
-				(font
-					(size 1.778 1.5113)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "JST2 switch:EG1390"
-			(at 62.23 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 62.23 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 62.23 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "S1"
-			(uuid "87980374-a93b-4f3e-9b7c-dd8df87c93f8")
-		)
-		(pin "P2"
-			(uuid "3c9b5cb6-9365-43a0-bb68-686799fcd961")
-		)
-		(pin "S2"
-			(uuid "98b314d3-0dca-445d-984f-1e461b62a1ec")
-		)
-		(pin "O1"
-			(uuid "93630e8f-67c9-42a3-889c-b881544db23a")
-		)
-		(pin "O2"
-			(uuid "7359da02-effb-47a6-a69e-fff984b6264d")
-		)
-		(pin "P1"
-			(uuid "448c9f92-c612-463b-9a80-fe45afec26f8")
-		)
-		(instances
-			(project "ribboncontroller"
-				(path "/f5827886-e161-4fb4-ab61-26dbf0f779d6"
-					(reference "SW1")
-					(unit 2)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 71.12 129.54 180)
 		(unit 1)
@@ -5426,6 +5274,178 @@
 			(project "ribboncontroller"
 				(path "/f5827886-e161-4fb4-ab61-26dbf0f779d6"
 					(reference "#FLG04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "dk_Slide-Switches:JS202011SCQN")
+		(at 41.91 129.54 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b646e33e-c8a6-4317-96c8-25f110a5a198")
+		(property "Reference" "S1"
+			(at 41.7576 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "JS202011SCQN"
+			(at 41.7576 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "digikey-footprints:Switch_Slide_JS202011SCQN"
+			(at 36.83 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.ckswitches.com/media/1422/js.pdf"
+			(at 36.83 137.16 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "SWITCH SLIDE DPDT 300MA 6V"
+			(at 41.91 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Digi-Key_PN" "401-2002-1-ND"
+			(at 36.83 139.7 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "MPN" "JS202011SCQN"
+			(at 36.83 142.24 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Category" "Switches"
+			(at 36.83 144.78 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Family" "Slide Switches"
+			(at 36.83 147.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "DK_Datasheet_Link" "https://www.ckswitches.com/media/1422/js.pdf"
+			(at 36.83 149.86 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "DK_Detail_Page" "/product-detail/en/c-k/JS202011SCQN/401-2002-1-ND/1640098"
+			(at 36.83 152.4 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "SWITCH SLIDE DPDT 300MA 6V"
+			(at 36.83 154.94 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "C&K"
+			(at 36.83 157.48 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "Active"
+			(at 36.83 160.02 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "b9bfe91f-1cd1-4044-8f86-15a37ddbcffd")
+		)
+		(pin "1"
+			(uuid "e2ba0a74-671f-42c2-af39-b4b086e8644c")
+		)
+		(pin "2"
+			(uuid "73aa141c-82c1-40f7-87a0-07891915b86e")
+		)
+		(pin "5"
+			(uuid "db83073e-6dbe-4c2f-802b-f6a7b4b382d1")
+		)
+		(pin "6"
+			(uuid "8cd323aa-3518-473e-bdfd-eaae2a2320f1")
+		)
+		(pin "4"
+			(uuid "05ccb9e9-ac2c-4ed7-8fd0-b99492ca33f7")
+		)
+		(instances
+			(project ""
+				(path "/f5827886-e161-4fb4-ab61-26dbf0f779d6"
+					(reference "S1")
 					(unit 1)
 				)
 			)
