@@ -90,7 +90,7 @@ uint16_t storageValidValue = 101;
 int storageValidAddress = 301;
 
 bool calibrateMode = false;
-bool debugMode = true;
+bool debugMode = false;
 
 QuickStats stats;
 
