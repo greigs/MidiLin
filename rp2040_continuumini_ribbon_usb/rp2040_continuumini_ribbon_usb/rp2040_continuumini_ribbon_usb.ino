@@ -793,7 +793,7 @@ void sendMidiMessage(byte param1, byte param2, byte channel) {
 }
 
 void sendPitchBendMidiMessage(int bend) {
-  int mappedBend = ((int)map(bend,0, 16383,MIDI_PITCHBEND_MIN/4,MIDI_PITCHBEND_MAX/4)) * -1 // map and reverse the direction;
+  int mappedBend = ((int)map(bend,0, 16383,MIDI_PITCHBEND_MIN/4,MIDI_PITCHBEND_MAX/4)) * -1; // map and reverse the direction;
   hostMidi->sendPitchBend(mappedBend, userChannel);
   if (debugMode)
   {
